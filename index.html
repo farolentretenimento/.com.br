@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Farol Entretenimento - Compra Segura</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --primary:#5e17eb;
+  --primary-dark:#4d13c2;
+  --danger:#e31e24;
+  --dark:#000000;
+  --text:#666;
+  --heading:#333;
+  --border:#e0e0e0;
+}
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  font-family:'Lato',sans-serif;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+body{
+  background:#f5f5f5;
+  color:var(--text);
+  font-size:15px;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+a{text-decoration:none;color:inherit;}
+img{max-width:100%;display:block;}
+
+/* HEADER */
+.header{background:var(--primary);position:sticky;top:0;z-index:100;box-shadow:0 2px 5px rgba(0,0,0,.15);}
+.header-inner{display:flex;align-items:center;justify-content:space-between;height:65px;padding:0 15px;max-width:1080px;margin:0 auto;}
+.header-left, .header-right { display: flex; align-items: center; gap: 15px; }
+.menu-btn { background:none; border:none; color:#fff; cursor:pointer; display:flex; align-items:center; }
+.menu-btn svg { width:28px; height:28px; fill:currentColor; }
+.logo{display:flex;align-items:center;}
+.logo img{max-height:40px; width:auto; display:block;}
+.cart-header-btn{background:none;border:none;color:#fff;cursor:pointer;display:flex;align-items:center;gap:5px;font-weight:700;}
+.cart-header-btn svg{width:26px;height:26px;fill:currentColor;}
+.cart-count-badge{background:#fff;color:var(--primary);border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;font-size:11px;}
+
+/* MENU LATERAL */
+.overlay-menu { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 200; display: none; }
+.overlay-menu.active { display: block; }
+.side-menu { position: fixed; top: 0; left: -280px; width: 280px; height: 100%; background: #fff; z-index: 201; transition: left 0.3s ease; overflow-y: auto; }
+.side-menu.active { left: 0; }
+.side-menu-header { padding: 20px; background: var(--primary); color: #fff; display: flex; justify-content: space-between; align-items: center; }
+.side-menu-header h3 { font-size: 18px; font-weight: 700; }
+.close-menu-btn { background: none; border: none; color: #fff; font-size: 24px; cursor: pointer; }
+.side-menu-nav { list-style: none; padding: 20px; }
+.side-menu-nav li { border-bottom: 1px solid #eee; }
+.side-menu-nav a { display: block; padding: 15px 0; color: var(--heading); font-weight: 700; font-size: 14px; text-transform: uppercase; }
+
+/* HOME */
+.home-screen{display:block;background:#fff;min-height:80vh;}
+.hero img{width:100%;max-height:300px;object-fit:cover;display:block;}
+.section-title{text-align:center;margin:30px 15px 20px;font-size:20px;font-weight:900;color:var(--primary);text-transform:uppercase;}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:15px;padding:0 15px 30px;max-width:1080px;margin:0 auto;}
+@media (min-width: 768px) {
+  .grid { grid-template-columns: repeat(4, 1fr); gap: 20px; padding: 0 20px 40px; }
+}
+.card{background:#fff;border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center;display:flex;flex-direction:column;position:relative;}
+.badge{position:absolute;top:10px;left:10px;background:var(--primary);color:#fff;font-size:10px;font-weight:700;padding:4px 8px;border-radius:15px;z-index:2;}
+.card-img{width:100%;aspect-ratio:1/1.4;background:#f9f9f9;border-radius:6px;margin-bottom:10px;overflow:hidden;display:flex;align-items:center;justify-content:center;position:relative;}
+.card-img img{width:100%;height:100%;object-fit:cover;position:absolute;top:0;left:0;z-index:1;}
+.fallback-bg {position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-weight:900;color:#fff;font-size:16px;text-align:center;padding:10px;z-index:0;}
+.card-category{font-size:10px;color:#999;text-transform:uppercase;letter-spacing:1px;margin-bottom:5px;}
+.card-title{font-size:13px;font-weight:700;color:var(--heading);margin-bottom:5px;flex:1;line-height:1.3;}
+.price{margin-bottom:10px;}
+.price ins{color:var(--primary);font-size:16px;font-weight:900;text-decoration:none;display:block;}
+.price del{color:#999;font-size:12px;}
+.btn-add{background:var(--primary);color:#fff;border:none;padding:10px;border-radius:5px;font-weight:700;font-size:12px;cursor:pointer;width:100%;text-transform:uppercase;}
+
+/* FOOTER E PAGAMENTOS */
+.payments-section { text-align: center; padding: 30px 15px; background: #fff; border-top: 1px solid #eee; }
+.payments-section img { max-width: 100%; max-height: 50px; margin: 0 auto; display: block; }
+.footer { background: #000; color: #aaa; padding: 40px 15px 20px; font-size: 13px; line-height: 1.6; }
+.footer-inner { max-width: 800px; margin: 0 auto; display: grid; gap: 25px; text-align: center; }
+@media (min-width: 768px) {
+  .footer-inner { grid-template-columns: repeat(3, 1fr); text-align: left; gap: 30px; }
+  .footer-bottom { text-align: center; grid-column: span 3; }
+}
+.footer-col h4 { color: #fff; font-size: 16px; font-weight: 700; margin-bottom: 10px; text-transform: uppercase; }
+.footer-col p { margin-bottom: 10px; }
+.footer-col a { color: #aaa; text-decoration: underline; }
+.footer-bottom { text-align: center; border-top: 1px solid #222; padding-top: 20px; margin-top: 10px; font-size: 12px; color: #666; }
+
+/* CONTATO SCREEN */
+.contact-screen{display:none;background:#fff;min-height:80vh;padding:30px 15px;}
+.contact-screen.active{display:block;}
+.contact-title { font-size: 24px; font-weight: 900; color: var(--heading); margin-bottom: 10px; }
+.contact-desc { font-size: 14px; color: #777; margin-bottom: 20px; }
+.contact-form .form-group { margin-bottom: 15px; }
+.contact-form label { display: block; font-weight: 700; margin-bottom: 5px; font-size: 13px; color: var(--heading); }
+.contact-form input, .contact-form textarea { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 5px; font-size: 14px; outline: none; }
+.contact-form input:focus, .contact-form textarea:focus { border-color: var(--primary); }
+.btn-submit { background: var(--primary); color: #fff; border: none; padding: 12px 20px; border-radius: 5px; font-weight: 700; font-size: 14px; cursor: pointer; width: 100%; text-transform: uppercase; }
+
+/* CARRINHO */
+.cart-screen{display:none;background:#fff;min-height:80vh;}
+.cart-screen.active{display:block;}
+.cart-top-bar{background:#f9f9f9;padding:15px;border-bottom:1px solid var(--border);text-align:center;font-size:14px;font-weight:700;color:var(--heading);text-transform:uppercase;}
+.cart-content{padding:20px 15px;max-width:800px;margin:0 auto;}
+.order-number{background:#e8e0ff;color:var(--primary);padding:10px;border-radius:5px;font-weight:700;text-align:center;margin-bottom:20px;font-size:14px;}
+.cart-table{width:100%;border-collapse:collapse;margin-bottom:20px;}
+.cart-table th{text-align:left;padding-bottom:10px;border-bottom:2px solid var(--border);font-size:12px;text-transform:uppercase;color:var(--heading);}
+.cart-table td{padding:15px 0;border-bottom:1px solid var(--border);vertical-align:middle;}
+.cart-item-info{display:flex;align-items:center;gap:10px;}
+.cart-item-thumb{width:50px;height:70px;background:#faf7ff;border-radius:4px;overflow:hidden;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff;text-align:center;background-size:cover;background-position:center;}
+.cart-item-details h3{font-size:13px;font-weight:700;color:var(--heading);margin-bottom:3px;}
+.cart-item-details .price-txt{font-size:12px;color:#777;}
+.qty-control{display:flex;align-items:center;justify-content:flex-end;gap:8px;}
+.qty-btn{width:26px;height:26px;border:1px solid var(--border);background:#fff;border-radius:4px;font-weight:700;cursor:pointer;}
+.btn-outline{display:block;text-align:center;border:2px solid var(--primary);color:var(--primary);padding:12px;border-radius:5px;font-weight:700;font-size:14px;text-transform:uppercase;margin-bottom:15px;cursor:pointer;}
+.btn-purple{display:block;text-align:center;background:var(--primary);color:#fff;border:none;padding:15px;border-radius:5px;font-weight:700;font-size:15px;text-transform:uppercase;cursor:pointer;width:100%;margin-bottom:15px;}
+.cart-totals{margin-bottom:20px;}
+.cart-totals-row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);font-size:14px;font-weight:700;color:var(--heading);}
+.coupon-box{padding-top:15px;border-top:1px solid var(--border);margin-bottom:20px;}
+.coupon-box label{font-size:12px;font-weight:700;display:block;margin-bottom:5px;}
+.coupon-box input{width:100%;padding:10px;border:1px solid var(--border);border-radius:5px;margin-bottom:10px;}
+.coupon-box button{width:100%;padding:10px;background:#f0f0f0;border:none;border-radius:5px;font-weight:700;color:#666;}
+.cart-security{text-align:center;margin-top:20px;}
+.cart-security img{max-height:45px;margin:0 auto;}
+
+/* CHECKOUT */
+.checkout-screen{display:none;background:#fff;min-height:80vh;}
+.checkout-screen.active{display:block;}
+.checkout-header-logo{text-align:center;padding:20px 15px 10px;}
+.checkout-header-logo h1{font-size:32px;font-weight:900;color:var(--danger);letter-spacing:-1px;line-height:1;}
+.checkout-header-logo h1 span{color:var(--dark);display:block;font-size:18px;letter-spacing:1px;margin-top:5px;}
+.checkout-content{padding:0 15px 40px;max-width:600px;margin:0 auto;}
+.checkout-title{font-size:20px;font-weight:900;color:var(--heading);text-transform:uppercase;margin-bottom:20px;text-align:center;}
+.checkout-login-links{text-align:center;font-size:13px;margin-bottom:25px;color:var(--primary);line-height:1.6;}
+.form-section-title{font-size:14px;font-weight:900;color:var(--heading);text-transform:uppercase;margin-bottom:15px;border-bottom:1px solid var(--border);padding-bottom:5px;}
+.form-group{margin-bottom:12px;}
+.form-group label{font-size:12px;font-weight:700;display:block;margin-bottom:3px;color:var(--heading);}
+.form-group input{width:100%;padding:12px;border:1px solid var(--border);border-radius:4px;font-size:14px;outline:none;}
+.form-group input:focus{border-color:var(--primary);}
+.form-row{display:flex;gap:10px;}
+.form-row .form-group{flex:1;}
+.payment-methods{display:flex;gap:10px;margin-bottom:20px;}
+.payment-option{flex:1;border:2px solid var(--border);padding:10px;text-align:center;border-radius:5px;font-size:12px;font-weight:700;cursor:pointer;}
+.payment-option.selected{border-color:var(--primary);color:var(--primary);background:#f5f0ff;}
+.btn-checkout-final{width:100%;background:#25d366;color:#fff;padding:16px;border:none;border-radius:5px;font-size:16px;font-weight:900;text-transform:uppercase;cursor:pointer;margin-top:10px;}
+
+/* WHATSAPP FLUTUANTE */
+.wpp-float{position:fixed;bottom:20px;right:20px;width:55px;height:55px;background:#25d366;color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;z-index:150;box-shadow:0 4px 10px rgba(0,0,0,.2);}
+.wpp-float svg{width:30px;height:30px;fill:currentColor;}
+
+/* TOAST */
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#222;color:#fff;padding:10px 20px;border-radius:20px;font-size:13px;opacity:0;transition:opacity 0.3s;pointer-events:none;z-index:300;white-space:nowrap;}
+.toast.show{opacity:1;}
+
+</style>
+</head>
+<body>
+
+<!-- MENU LATERAL -->
+<div class="overlay-menu" id="overlayMenu" onclick="toggleMenu()"></div>
+<div class="side-menu" id="sideMenu">
+  <div class="side-menu-header">
+    <h3>Menu</h3>
+    <button class="close-menu-btn" onclick="toggleMenu()">×</button>
+  </div>
+  <ul class="side-menu-nav">
+    <li><a href="#" onclick="showHome(event); toggleMenu();">Loja</a></li>
+    <li><a href="#">Meus Códigos</a></li>
+    <li><a href="#" onclick="showContact(event); toggleMenu();">Contato</a></li>
+    <li><a href="#">Entrar</a></li>
+  </ul>
+</div>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-inner">
+    <div class="header-left">
+      <!-- Botão 3 pontinhos -->
+      <button class="menu-btn" onclick="toggleMenu()">
+        <svg viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+      </button>
+      <a href="#" class="logo" onclick="showHome(event)">
+        <!-- LOGO REAL AQUI -->
+        <img src="https://farolentretenimento.com/wp-content/uploads/2025/09/Design-sem-nome-e1758415887104-1400x471.png" alt="Farol Entretenimento" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+        <span style="display:none;color:#fff;font-size:18px;font-weight:900;">FAROL</span>
+      </a>
+    </div>
+    <div class="header-right">
+      <!-- Carrinho -->
+      <button class="cart-header-btn" onclick="showCart(event)">
+        <svg viewBox="0 0 24 24"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>
+        <span class="cart-count-badge" id="headerCount">0</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- HOME -->
+<div class="home-screen" id="homeScreen">
+  <section class="hero">
+    <img src="https://farolentretenimento.com/wp-content/uploads/2025/11/FAROL-1.jpg" alt="Banner Farol" onerror="this.src='https://via.placeholder.com/800x300/5e17eb/fff?text=Farol+Entretenimento'">
+  </section>
+  <h2 class="section-title">Escolha seu plano</h2>
+  <div class="grid" id="gridHome"></div>
+  
+  <!-- PAGAMENTOS -->
+  <div class="payments-section">
+    <img src="https://farolentretenimento.com/wp-content/uploads/2024/10/formas-pagam.png.webp" alt="Formas de Pagamento" onerror="this.style.display='none'">
+  </div>
+
+  <!-- RODAPÉ -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-col">
+        <h4>Quem Somos</h4>
+        <p>O Farol Entretenimento é uma revenda de GIFT CARD dos mais variados segmentos. Isto significa que NÃO é responsável em adicionar nenhum conteúdo ou de controlar a disponibilidade do mesmo. Portanto, os usuários são os responsáveis pelo o seu GIFT CARD como também por I INSTALAR I ALTERAR e ADICIONAR o seus próprio conteúdo, se assim o desejam, CONFORME TERMO DE ACEITE! Por este motivo, a Farol Entretenimento não será responsabilizado caso o usuário perca o seu Gift Card.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Informações</h4>
+        <p>57.085.633 RUAN RODRIGUES LOURENÇO<br>
+        R. GuirinoJory, 13 uberaba CURITIBA - PR<br>
+        81590-592 BRASIL<br>
+        <a href="mailto:contato@farolentretenimento.com">contato@farolentretenimento.com</a></p>
+      </div>
+      <div class="footer-col">
+        <h4>Políticas</h4>
+        <p><a href="#">Política de troca</a><br><a href="#">Política de reembolso</a></p>
+      </div>
+      <div class="footer-bottom">
+        Copyright 2026 © Farol Entretenimento
+      </div>
+    </div>
+  </footer>
+</div>
+
+<!-- TELA DE CONTATO -->
+<div class="contact-screen" id="contactScreen">
+  <div class="contact-content" style="max-width: 600px; margin: 0 auto;">
+    <h2 class="contact-title">Fale conosco</h2>
+    <p class="contact-desc">Precisa falar com a gente? Utilize o nosso formulário de contato para entrar em contato conosco.</p>
+    <form class="contact-form" action="https://formsubmit.co/contato@farolentretenimento.com" method="POST">
+      <div class="form-group">
+        <label>Seu nome</label>
+        <input type="text" name="name" required>
+      </div>
+      <div class="form-group">
+        <label>Seu e-mail</label>
+        <input type="email" name="email" required>
+      </div>
+      <div class="form-group">
+        <label>Assunto</label>
+        <input type="text" name="subject" required>
+      </div>
+      <div class="form-group">
+        <label>Sua mensagem</label>
+        <textarea name="message" rows="5" required></textarea>
+      </div>
+      <button type="submit" class="btn-submit">Enviar</button>
+    </form>
+    <div style="text-align:center; margin-top:20px;">
+      <a href="#" onclick="showHome(event)" style="color:var(--primary); text-decoration:underline; font-weight:700;">&larr; Voltar para a loja</a>
+    </div>
+  </div>
+</div>
+
+<!-- CARRINHO -->
+<div class="cart-screen" id="cartScreen">
+  <div class="cart-top-bar">Carrinho</div>
+  <div class="cart-content">
+    <a href="#" onclick="showHome(event)" style="font-size:12px; color:#777; display:block; margin-bottom:15px; text-decoration:underline;">&larr; Continuar comprando</a>
+    
+    <div class="order-number" id="orderNumberDisplay">Pedido #0000</div>
+
+    <table class="cart-table">
+      <thead>
+        <tr>
+          <th>Produto</th>
+          <th style="text-align:right;">Qtd</th>
+        </tr>
+      </thead>
+      <tbody id="cartTableBody"></tbody>
+    </table>
+
+    <div class="cart-totals">
+      <div class="cart-totals-row"><span>Subtotal</span><span id="cartSubtotal">R$ 0,00</span></div>
+      <div class="cart-totals-row"><span>Total</span><span id="cartTotal">R$ 0,00</span></div>
+    </div>
+
+    <button class="btn-purple" onclick="goToCheckout()">Continuar para Finalização</button>
+
+    <div class="coupon-box">
+      <label>🏷️ Cupom de desconto</label>
+      <input type="text" placeholder="Código do cupom">
+      <button type="button">Aplicar cupom</button>
+    </div>
+
+    <div class="cart-security">
+      <img src="https://farolentretenimento.com/wp-content/uploads/2021/03/compra-segura.png" alt="Compra Segura" onerror="this.style.display='none'">
+    </div>
+  </div>
+</div>
+
+<!-- CHECKOUT -->
+<div class="checkout-screen" id="checkoutScreen">
+  <div class="checkout-header-logo">
+    <h1>FAROL<span>ENTRETENIMENTO</span></h1>
+  </div>
+
+  <div class="checkout-content">
+    <h2 class="checkout-title">DETALHES DA COMPRA</h2>
+    
+    <div class="checkout-login-links">
+      Já é cliente? <a href="#" style="font-weight:700;">Clique aqui para entrar</a><br>
+      Você tem um cupom de desconto? <a href="#" style="font-weight:700;">Clique aqui e informe</a>
+    </div>
+
+    <form id="checkoutForm" onsubmit="finalizarCompra(event)">
+      <h3 class="form-section-title">DETALHES DE COBRANÇA</h3>
+      
+      <div class="form-group">
+        <label>Nome *</label>
+        <input type="text" id="nome" required>
+      </div>
+
+      <div class="form-group">
+        <label>Sobrenome *</label>
+        <input type="text" id="sobrenome" required>
+      </div>
+
+      <div class="form-group">
+        <label>CPF *</label>
+        <input type="text" id="cpf" required placeholder="Somente números">
+      </div>
+
+      <div class="form-group">
+        <label>Telefone (DDD + Número) *</label>
+        <input type="tel" id="telefone" required placeholder="Somente números">
+      </div>
+
+      <div class="form-group">
+        <label>E-mail *</label>
+        <input type="email" id="email" required>
+      </div>
+
+      <h3 class="form-section-title" style="margin-top:25px;">ENDEREÇO DE ENTREGA</h3>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>CEP *</label>
+          <input type="text" id="cep" required placeholder="00000-000">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Endereço (Rua/Av) *</label>
+        <input type="text" id="endereco" required>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Número *</label>
+          <input type="text" id="numero" required>
+        </div>
+        <div class="form-group">
+          <label>Complemento</label>
+          <input type="text" id="complemento" placeholder="Apto, Bloco">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Bairro *</label>
+        <input type="text" id="bairro" required>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Cidade *</label>
+          <input type="text" id="cidade" required>
+        </div>
+        <div class="form-group">
+          <label>Estado *</label>
+          <input type="text" id="estado" required maxlength="2" placeholder="UF">
+        </div>
+      </div>
+
+      <h3 class="form-section-title" style="margin-top:25px;">FORMA DE PAGAMENTO</h3>
+      <div class="payment-methods">
+        <div class="payment-option selected" onclick="selectPay(this, 'PIX')">PIX</div>
+      </div>
+
+      <button type="submit" class="btn-checkout-final">FINALIZAR PEDIDO</button>
+
+      <div style="text-align:center; margin-top:20px;">
+        <img src="https://farolentretenimento.com/wp-content/uploads/2021/03/compra-segura.png" alt="Compra Segura" style="max-height:40px; margin:0 auto;" onerror="this.style.display='none'">
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- WHATSAPP FLUTUANTE -->
+<a href="https://wa.me/5500000000000" target="_blank" class="wpp-float">
+  <svg viewBox="0 0 32 32"><path d="M16 2a13.9 13.9 0 00-12 21L2 30l7.1-1.9A14 14 0 1016 2zm0 25.6a11.7 11.7 0 01-6-1.6l-.4-.2-4.2 1.1 1.1-4.1-.3-.4a11.6 11.6 0 019.8-17.9 11.7 11.7 0 016.9 21.2 11.7 11.7 0 01-6.9 1.9zm6.4-8.7c-.4-.2-2.1-1-2.4-1.1-.3-.1-.5-.2-.8.2s-.9 1.1-1.1 1.3c-.2.2-.4.3-.8.1a9.6 9.6 0 01-2.8-1.7 10.5 10.5 0 01-1.9-2.4c-.2-.4 0-.5.2-.7l.5-.6c.2-.2.2-.4.3-.6s0-.4 0-.6a11 11 0 00-.5-1.2c-.1-.3-.3-.3-.5-.3h-.5a1 1 0 00-.7.3 2.9 2.9 0 00-.9 2.2 5 5 0 001 2.6 11.4 11.4 0 004.4 3.9c.6.3 1.1.4 1.5.5a3.5 3.5 0 001.6.1 2.6 2.6 0 001.7-1.2 2.1 2.1 0 00.1-1.2c-.1-.1-.3-.2-.7-.3z"/></svg>
+</a>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// CONFIGURAÇÃO DOS PRODUTOS
+const produtos = [
+  { id: 963, nome: "Gift Card MENSAL", cat: "Mensal", de: 29.90, por: 21.99, img: "https://farolentretenimento.com/wp-content/uploads/2021/03/unitv-mensal-farol-510x707.png", tipo: "img", cor: "#555" },
+  { id: 965, nome: "Gift Card Trimestral", cat: "Trimestral", de: 79.90, por: 65.90, img: "https://farolentretenimento.com/wp-content/uploads/2021/03/unitv-trimestral-farol-510x707.png", tipo: "img", cor: "#555" },
+  { id: 967, nome: "Gift Card Anual", cat: "Anual", de: 199.90, por: 165.90, img: "https://farolentretenimento.com/wp-content/uploads/2021/03/unitv-anual-play-recargas-510x707.png", tipo: "img", cor: "#555" },
+  { id: 8274, nome: "Gift Card TV+EXPRESS – mensal", cat: "Mensal", de: 30.00, por: 22.90, img: "https://farolentretenimento.com/wp-content/uploads/2024/10/tve-mensal-1-510x707.png", tipo: "img", cor: "#0f2b5c" },
+  { id: 8273, nome: "Gift Card TV+EXPRESS- trimestral", cat: "Trimestral", de: 75.00, por: 59.90, img: "https://farolentretenimento.com/wp-content/uploads/2024/10/tve-trimestral-510x707.png", tipo: "img", cor: "#0f2b5c" },
+  { id: 1635, nome: "Gift Card TV+EXPRESS – Anual", cat: "Anual", de: 180.00, por: 150.98, img: "https://farolentretenimento.com/wp-content/uploads/2024/10/tve-anual-510x707.png", tipo: "img", cor: "#0f2b5c" },
+  { id: 972, nome: "Gift Card Eppi / flixx cine – Mensal", cat: "Mensal", de: null, por: 19.98, img: "", tipo: "img", cor: "#007f3d" },
+  { id: 1452, nome: "Gift Card Eppi / flixx cine – Trimestral", cat: "Trimestral", de: 65.00, por: 59.99, img: "", tipo: "img", cor: "#007f3d" },
+  { id: 8276, nome: "Gift Card Eppi / flixx cine – Anual", cat: "Anual", de: null, por: 129.98, img: "", tipo: "img", cor: "#007f3d" },
+  { id: 1629, nome: "Gift Card nexaTV – Mensal", cat: "Mensal", de: null, por: 22.98, img: "", tipo: "img", cor: "#4a0cb0" },
+  { id: 1628, nome: "Gift Card nexa tv/ TVE – Anual", cat: "Anual", de: null, por: 150.98, img: "", tipo: "img", cor: "#4a0cb0" },
+  { id: 1630, nome: "Gift Card nexa tv / TVE – trimestral", cat: "Trimestral", de: null, por: 59.98, img: "", tipo: "img", cor: "#4a0cb0" }
+];
+
+const brl = n => "R$ " + n.toFixed(2).replace(".", ",");
+let carrinho = JSON.parse(localStorage.getItem("farol_cart") || "{}");
+
+if(!localStorage.getItem("farol_order_num")) {
+  localStorage.setItem("farol_order_num", Math.floor(1000 + Math.random() * 9000));
+}
+const orderNum = localStorage.getItem("farol_order_num");
+
+// RENDERIZAR VITRINE
+const gridHome = document.getElementById("gridHome");
+gridHome.innerHTML = produtos.map(p => {
+  let fallback = `<div class="fallback-bg" style="background:${p.cor};"><span>${p.nome.split('–')[0]}</span></div>`;
+  let imgHtml = p.img ? `<img src="${p.img}" alt="${p.nome}" onerror="this.style.display='none'">` : '';
+
+  return `
+  <div class="card">
+    ${p.de ? '<span class="badge">Oferta!</span>' : ''}
+    <div class="card-img">
+      ${fallback}
+      ${imgHtml}
+    </div>
+    <div class="card-category">${p.cat}</div>
+    <div class="card-title">${p.nome}</div>
+    <div class="price">
+      ${p.de ? `<del>${brl(p.de)}</del>` : ''}
+      <ins>${brl(p.por)}</ins>
+    </div>
+    <button class="btn-add" onclick="addToCart(${p.id})">Adicionar</button>
+  </div>`;
+}).join("");
+
+// CONTROLE DO MENU LATERAL
+function toggleMenu() {
+  const menu = document.getElementById("sideMenu");
+  const overlay = document.getElementById("overlayMenu");
+  menu.classList.toggle("active");
+  overlay.classList.toggle("active");
+}
+
+// ADICIONAR AO CARRINHO
+function addToCart(id) {
+  const p = produtos.find(x => x.id === id);
+  if(!carrinho[id]){
+    carrinho[id] = { id, nome: p.nome, preco: p.por, tipo: p.tipo, img: p.img, cor: p.cor, qty: 0 };
+  }
+  carrinho[id].qty++;
+  updateCartUI();
+  showToast("Adicionado ao carrinho!");
+}
+
+// ATUALIZAR UI DO CARRINHO
+function updateCartUI() {
+  const itens = Object.values(carrinho);
+  const total = itens.reduce((s,i) => s + i.qty * i.preco, 0);
+  const totalQty = itens.reduce((s,i) => s + i.qty, 0);
+
+  document.getElementById("headerCount").textContent = totalQty;
+  document.getElementById("orderNumberDisplay").textContent = `Pedido #${orderNum}`;
+  document.getElementById("cartSubtotal").textContent = brl(total);
+  document.getElementById("cartTotal").textContent = brl(total);
+
+  const tbody = document.getElementById("cartTableBody");
+  if(itens.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="2" style="text-align:center; color:#999; padding:20px;">Seu carrinho está vazio.</td></tr>`;
+  } else {
+    tbody.innerHTML = itens.map(i => {
+      let thumbStyle = i.img ? `background-image:url('${i.img}');` : `background-color:${i.cor};`;
+      return `
+      <tr>
+        <td>
+          <div class="cart-item-info">
+            <div class="cart-item-thumb" style="${thumbStyle} background-size:cover;">${!i.img ? i.nome.split('–')[0] : ''}</div>
+            <div class="cart-item-details">
+              <h3>${i.nome}</h3>
+              <div class="price-txt">${brl(i.preco)}</div>
+            </div>
+          </div>
+        </td>
+        <td>
+          <div class="qty-control">
+            <button class="qty-btn" onclick="changeQty(${i.id}, -1)">−</button>
+            <span>${i.qty}</span>
+            <button class="qty-btn" onclick="changeQty(${i.id}, 1)">+</button>
+          </div>
+        </td>
+      </tr>
+      `;
+    }).join("");
+  }
+  localStorage.setItem("farol_cart", JSON.stringify(carrinho));
+}
+
+function changeQty(id, delta) {
+  if(!carrinho[id]) return;
+  carrinho[id].qty += delta;
+  if(carrinho[id].qty <= 0) delete carrinho[id];
+  updateCartUI();
+}
+
+// NAVEGAÇÃO ENTRE TELAS
+function showHome(e) {
+  if(e) e.preventDefault();
+  document.getElementById("homeScreen").style.display = "block";
+  document.getElementById("contactScreen").classList.remove("active");
+  document.getElementById("cartScreen").classList.remove("active");
+  document.getElementById("checkoutScreen").classList.remove("active");
+}
+function showContact(e) {
+  if(e) e.preventDefault();
+  document.getElementById("homeScreen").style.display = "none";
+  document.getElementById("contactScreen").classList.add("active");
+  document.getElementById("cartScreen").classList.remove("active");
+  document.getElementById("checkoutScreen").classList.remove("active");
+}
+function showCart(e) {
+  if(e) e.preventDefault();
+  document.getElementById("homeScreen").style.display = "none";
+  document.getElementById("contactScreen").classList.remove("active");
+  document.getElementById("cartScreen").classList.add("active");
+  document.getElementById("checkoutScreen").classList.remove("active");
+}
+function goToCheckout() {
+  if(Object.keys(carrinho).length === 0) return showToast("Carrinho vazio!");
+  document.getElementById("homeScreen").style.display = "none";
+  document.getElementById("contactScreen").classList.remove("active");
+  document.getElementById("cartScreen").classList.remove("active");
+  document.getElementById("checkoutScreen").classList.add("active");
+}
+
+// CHECKOUT (SOMENTE PIX)
+function selectPay(el, method) {
+  document.querySelectorAll('.payment-option').forEach(opt => opt.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function finalizarCompra(e) {
+  e.preventDefault();
+  const nome = document.getElementById("nome").value;
+  const tel = document.getElementById("telefone").value;
+  const pagamento = document.querySelector('.payment-option.selected').innerText;
+  
+  // Pegando dados do endereço
+  const cep = document.getElementById("cep").value;
+  const endereco = document.getElementById("endereco").value;
+  const numero = document.getElementById("numero").value;
+  const complemento = document.getElementById("complemento").value;
+  const bairro = document.getElementById("bairro").value;
+  const cidade = document.getElementById("cidade").value;
+  const estado = document.getElementById("estado").value;
+
+  let msg = `*NOVO PEDIDO #${orderNum}*\n\n`;
+  msg += `*Nome:* ${nome}\n*Tel:* ${tel}\n*Pagamento:* ${pagamento}\n\n`;
+  msg += `*Endereço de Entrega:*\n`;
+  msg += `CEP: ${cep}\nRua: ${endereco}, Nº: ${numero}\n`;
+  if(complemento) msg += `Comp: ${complemento}\n`;
+  msg += `Bairro: ${bairro}\nCidade: ${cidade} - ${estado}\n\n`;
+  
+  msg += `*Produtos:*\n`;
+  Object.values(carrinho).forEach(i => { msg += `• ${i.qty}x ${i.nome} — ${brl(i.preco * i.qty)}\n`; });
+  
+  const total = Object.values(carrinho).reduce((s,i) => s + i.qty * i.preco, 0);
+  msg += `\n*Total:* ${brl(total)}`;
+
+  window.open(`https://wa.me/5500000000000?text=${encodeURIComponent(msg)}`, "_blank");
+  
+  carrinho = {};
+  updateCartUI();
+  localStorage.removeItem("farol_order_num");
+  showToast("Pedido enviado!");
+  setTimeout(() => showHome(), 2000);
+}
+
+// TOAST
+function showToast(msg) {
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  setTimeout(() => t.classList.remove("show"), 2500);
+}
+
+// INICIAR
+updateCartUI();
+</script>
+</body>
+</html>
